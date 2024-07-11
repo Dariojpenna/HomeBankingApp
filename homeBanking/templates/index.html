@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% load static %}
+
+
+
+{% block body%}
+<div class="col-10 col-md-8">
+     <div>
+          <h3 class="fs-1 mt-3">Home Banking app</h3>
+     </div>
+
+     {% if message %}
+          <div class="bg-success p-2 text-white w-75 rounded-4 d-flex justify-content-center" style="--bs-bg-opacity: .8;">         
+                    {{message}}
+          </div>
+     {% endif %}
+     <hr>
+     <div class=" w-75 m-auto d-flex" id="account-card" onclick="accountPage()">
+               <div class="col-2 card m-4" id="SA">
+                    <p class="m-auto fs-1 text-light">SA</p>
+               </div>
+               <div class="col-6 m-auto">
+                    <p class="m-0 fs-1" style="font-size: 3em;">$ {{account.account_amount}}</pc> 
+               </div>
+
+     </div>
+     <hr>
+     
+     <table class="table table-borderless w-75 m-auto">
+          <thead>
+               <tr class="m-auto">
+                    <th scope="col" class="text-center align-middle" >Date</th>
+                    <th scope="col" class="text-center align-middle">Description</th>
+                    <th scope="col" class="text-center align-middle">Amount</th>
+               </tr>
+          </thead>
+          <tbody>
+               {% for transaction in transactions %}
+                    <tr>
+                         <td class="text-center align-middle bg-secondary-subtle">{{transaction.date.date}}</td>
+                         <td class="text-center align-middle">{{transaction.type}}</td>
+                         <td class="text-center align-middle bg-secondary-subtle">
+                              {% if transaction.type == "Deposit" %}
+                                   $  +{{transaction.transaction_amount}}
+                              {% else %}    
+                                   {% if transaction.account_sender == account %}
+                                        $  -{{transaction.transaction_amount}}
+                                   {% else %}
+                                        $  +{{transaction.transaction_amount}}
+                                   {% endif %}
+                              {% endif %}
+                         </td>
+                    </tr>
+               {% endfor %}
+          </tbody>
+     </table>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'index.js' %}"></script>
+<script  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+{% endblock %}

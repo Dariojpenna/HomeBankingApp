@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% load static %}
+
+
+{% block body%}
+    <div class="col-10 col-md-8 px-1">
+        <h1 class="mt-3"> Make your deposit</h1>
+        <p>chooses the amount</p>
+        <form class="form" action="{% url 'deposit' %} " method="post">
+            {% csrf_token %}
+            <input  class="form-control w-50 fs-1" type="text" name="amount" maxlength="8" inputmode="numeric" pattern="[0-9]+" placeholder="$ 000,0" required >
+            <button class="btn btn-primary mt-2">Deposit</button>
+        </form>
+    
+        <hr>
+
+        <div>
+            <table class="table table-borderless w-100 m-auto">
+                <thead>
+                    <tr class="m-auto">
+                        <th scope="col" class="text-center align-middle" >Date</th>
+                        <th scope="col" class="text-center align-middle">Description</th>
+                        <th scope="col" class="text-center align-middle">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for deposit in depositsInPage %}
+                        <tr>
+                            <td class="text-center align-middle bg-secondary-subtle">{{deposit.date.date}}</td>
+                            <td class="text-center align-middle">{{deposit.type}}</td>
+                            <td class="text-center align-middle bg-secondary-subtle">$  +{{deposit.transaction_amount}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <nav class="nav justify-content-center" aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if depositsInPage.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{depositsInPage.previous_page_number}}">Previous</a></li>
+                {% endif %}
+        
+                {% if depositsInPage.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{depositsInPage.next_page_number}}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+<script  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+{% endblock %}
